@@ -5,6 +5,11 @@ from tensorflow.keras.layers import Input, Concatenate, Conv2DTranspose
 
 from constants import IMG_WIDTH, IMG_HEIGHT
 
+#
+# Most of the code is borrowed from
+# https://www.tensorflow.org/tutorials/images/segmentation
+#
+
 def unet(output_channels):
     base_model = tf.keras.applications.MobileNetV2(
         input_shape=[IMG_HEIGHT, IMG_WIDTH, 3], include_top=False)
