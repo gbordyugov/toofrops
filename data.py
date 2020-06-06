@@ -5,7 +5,7 @@ IMAGE_DATA_URL = 'https://dida.do/assets/downloads/dida-test-task/dida_test_task
 IMG_HEIGHT = 256
 IMG_WIDTH = 256
 
-def get_images_and_labels(url=IMAGE_DATA_URL):
+def download_images_and_labels(url=IMAGE_DATA_URL):
     """ Download data, unpack it and return paths to images and labels. """
     download_path = tf.keras.utils.get_file(origin=url,
                                             fname='rooftops.zip',
@@ -46,7 +46,7 @@ def match_images_with_labels(images, labels):
     return matches, non_matches
 
 
-def load_image_from_path(image_path, channels):
+def load_png(image_path, channels):
     img = tf.io.read_file(str(image_path))
     img = tf.image.decode_png(img, channels=channels)
     img = tf.image.convert_image_dtype(img, tf.float32)
@@ -54,9 +54,21 @@ def load_image_from_path(image_path, channels):
     return tf.image.resize(img, [IMG_HEIGHT, IMG_WIDTH])
 
 
-def matches_to_dataset(matches):
-    # TODO: fix the channels issue
-    pairs = [ (load_image_from_path(image, channels=3),
-               load_image_from_path(label, channels=1))
-              for _, (image, label) in matches.items() ]
-    return tf.data.Dataset.from_tensor_slices(pairs)
+def convert_matches_to_dataset(matches):
+    Dataset = tf.data.Dataset
+
+    pairs = [(load_png(image, channels=3),
+              load_png(label, channels=1))
+             for _, (image, label) in matches.items()]
+
+    images_ds = Dataset.from_tensor_slices([i for i, l in pairs])
+    labels_ds = Dataset.from_tensor_slices([l for i, l in pairs])
+
+    return Dataset.zip((images_ds, labels_ds))
+
+
+def go():
+    images, labels = download_images_and_labels()
+    matches, non_matches = match_images_with_labels(images, labels)
+    dataset = convert_matches_to_dataset(matches)
+    return dataset
