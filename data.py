@@ -1,9 +1,9 @@
 import tensorflow as tf
 from pathlib import Path
 
+from constants import IMG_WIDTH, IMG_HEIGHT
+
 IMAGE_DATA_URL = 'https://dida.do/assets/downloads/dida-test-task/dida_test_task.zip'
-IMG_HEIGHT = 256
-IMG_WIDTH = 256
 
 def download_images_and_labels(url=IMAGE_DATA_URL):
     """ Download data, unpack it and return paths to images and labels. """
@@ -71,4 +71,4 @@ def go():
     images, labels = download_images_and_labels()
     matches, non_matches = match_images_with_labels(images, labels)
     dataset = convert_matches_to_dataset(matches)
-    return dataset
+    return dataset.repeat().batch(32)
