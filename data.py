@@ -1,5 +1,7 @@
 import tensorflow as tf
+import tensorflow_addons as tfa
 from pathlib import Path
+from random import randint
 
 from constants import IMG_WIDTH, IMG_HEIGHT
 
@@ -41,9 +43,9 @@ def match_images_with_labels(images, labels):
     intersection = images_names & labels_names
 
     matches = {k: (images_d[k], labels_d[k]) for k in intersection}
-    non_matches = {k : images_d[k] for k in difference}
+    unmatches = {k : images_d[k] for k in difference}
 
-    return matches, non_matches
+    return matches, unmatches
 
 
 def load_png(image_path, channels):
@@ -67,8 +69,33 @@ def convert_matches_to_dataset(matches):
     return Dataset.zip((images_ds, labels_ds))
 
 
-def go():
+def augment_by_rotations(ds, no_rotations=4):
+    Dataset = tf.data.Dataset
+    def rotations(image, label):
+        """ Return a dataset of parallel, random rotations of image and labels. """
+
+        angles = [0] + [randint(0, 360) for _ in range(no_rotations)]
+
+        rotated_images = [tfa.image.rotate(image, a) for a in angles]
+        rotated_labels = [tfa.image.rotate(label, a) for a in angles]
+
+        images = Dataset.from_tensor_slices(rotated_images)
+        labels = Dataset.from_tensor_slices(rotated_labels)
+
+        return Dataset.zip((images, labels))
+
+    return ds.flat_map(rotations)
+
+
+def get_training_and_test_datasets(repeats=10, rotations=4,
+        test_every_nth=10, shuffle_size=100):
     images, labels = download_images_and_labels()
-    matches, non_matches = match_images_with_labels(images, labels)
-    dataset = convert_matches_to_dataset(matches)
-    return dataset.repeat().batch(32)
+    matches, unmatches = match_images_with_labels(images, labels)
+    ds = convert_matches_to_dataset(matches)
+    ds = augment_by_rotations(ds, rotations)
+
+    enumerated = ds.enumerate()
+    train = enumerated.filter(lambda i, _: i % test_every_nth != 0).map(lambda _, x: x)
+    test  = enumerated.filter(lambda i, _: i % test_every_nth == 0).map(lambda _, x: x)
+
+    return train.shuffle(shuffle_size), test.shuffle(shuffle_size)
