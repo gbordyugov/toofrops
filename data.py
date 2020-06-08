@@ -59,9 +59,9 @@ def load_png(image_path, channels):
 def convert_matches_to_dataset(matches):
     Dataset = tf.data.Dataset
 
-    pairs = [(load_png(image, channels=3),
-              load_png(label, channels=1))
-             for _, (image, label) in matches.items()]
+    pairs = [(load_png(image_path, channels=3),
+              load_png(label_path, channels=1))
+             for _, (image_path, label_path) in matches.items()]
 
     images_ds = Dataset.from_tensor_slices([i for i, l in pairs])
     labels_ds = Dataset.from_tensor_slices([l for i, l in pairs])
@@ -69,10 +69,21 @@ def convert_matches_to_dataset(matches):
     return Dataset.zip((images_ds, labels_ds))
 
 
+def load_unmatches(unmatches):
+    return [load_png(path, channels=3) for _, path in unmatches.items()]
+
+
+def get_unmatches():
+    images, labels = download_images_and_labels()
+    _, unmatches = match_images_with_labels(images, labels)
+    return load_unmatches(unmatches)
+
+
 def augment_by_rotations(ds, no_rotations=4):
     Dataset = tf.data.Dataset
     def rotations(image, label):
-        """ Return a dataset of parallel, random rotations of image and labels. """
+        """ Return a dataset of random rotations of image and labels,
+        both rotated in parallel. Include the trivial rotation, too."""
 
         angles = [0] + [randint(0, 360) for _ in range(no_rotations)]
 
@@ -90,7 +101,7 @@ def augment_by_rotations(ds, no_rotations=4):
 def get_training_and_test_datasets(repeats=10, rotations=4,
         test_every_nth=10, shuffle_size=100):
     images, labels = download_images_and_labels()
-    matches, unmatches = match_images_with_labels(images, labels)
+    matches, _ = match_images_with_labels(images, labels)
     ds = convert_matches_to_dataset(matches)
     ds = augment_by_rotations(ds, rotations)
 

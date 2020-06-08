@@ -2,7 +2,7 @@ import tensorflow as tf
 from model import unet
 from data import get_training_and_test_datasets
 
-def train(epochs=20, batch_size=10):
+def train(epochs=10, batch_size=10):
     model = unet(3)
     model.compile(optimizer='adam',
                   loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
