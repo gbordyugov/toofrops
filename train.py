@@ -2,10 +2,16 @@ import tensorflow as tf
 from model import unet
 from data import get_training_and_test_datasets
 
-def train(epochs=10, batch_size=10):
-    model = unet(3)
+def dice_loss(y_true, y_pred):
+  numerator = 2.0 * tf.reduce_sum(y_true * y_pred, axis=(1,2,3))
+  denominator = tf.reduce_sum(y_true + y_pred, axis=(1,2,3))
+  return 1.0 - numerator / denominator
+
+def train(epochs=10, batch_size=5):
+    model = unet(2)
     model.compile(optimizer='adam',
                   loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+                  # loss=dice_loss,
                   metrics=['accuracy'])
 
     train, test = get_training_and_test_datasets()
