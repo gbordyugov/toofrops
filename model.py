@@ -25,7 +25,6 @@ def unet():
 
     layers = [base_model.get_layer(name).output for name in layer_names]
 
-    # Create the feature extraction model
     down_stack = Model(inputs=base_model.input, outputs=layers)
 
     down_stack.trainable = False
@@ -41,20 +40,17 @@ def unet():
 
     x = inputs
 
-    # Downsampling through the model
     skips = down_stack(x)
     x = skips[-1]
     skips = reversed(skips[:-1])
 
-    # Upsampling and establishing the skip connections
     for up, skip in zip(up_stack, skips):
         x = up(x)
         concat = Concatenate()
         x = concat([x, skip])
 
-        # This is the last layer of the model
-        last = Conv2DTranspose(1, 3, strides=2,
-            activation='sigmoid', padding='same')
+        last = Conv2DTranspose(1, 3, strides=2, activation='sigmoid',
+                               padding='same')
 
     x = last(x)
 

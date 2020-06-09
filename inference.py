@@ -17,7 +17,7 @@ def make_one_prediction(model, input):
 def predict_unmatches(model, filename):
     unmatches = get_unmatches()
     preds = [make_one_prediction(model, u) for u in unmatches]
-    fig, axes = plt.subplots(5, 2, figsize=(8, 18))
+    fig, axes = plt.subplots(5, 2, figsize=(10, 15))
 
     for (ax1, ax2), unmatch, pred in zip(axes, unmatches, preds):
         ax1.imshow(unmatch)

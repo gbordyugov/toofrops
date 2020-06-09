@@ -1,11 +1,12 @@
 import tensorflow as tf
+
 from model import unet
 from data import get_training_dataset
 
 
 def dice_plus_x_entropy_loss(y_true, y_pred):
     """ Calculate a combination of the Dice loss and the normal
-    x-entropy loss. Borrowed from
+    binary x-entropy loss. Code borrowed from
     https://lars76.github.io/neural-networks/object-detection/losses-for-segmentation/
     Experimental, not used in the "production" code.
     """
@@ -27,7 +28,7 @@ def train(epochs=10, batch_size=5):
 
     train = get_training_dataset()
 
-    # can consume to much memory on a larger dataset, but for 25 pics is OK
+    # can consume too much memory on a larger dataset, but for 25 pics is OK
     train_size = len(list(train))
 
     train_batched = train.batch(batch_size).repeat(epochs)

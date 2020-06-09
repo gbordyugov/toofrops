@@ -49,6 +49,7 @@ def match_images_with_labels(images, labels):
 
 
 def load_png(image_path, channels):
+    """ Load, normalize, and resize an image from the given path."""
     img = tf.io.read_file(str(image_path))
     img = tf.image.decode_png(img, channels=channels)
     img = tf.image.convert_image_dtype(img, tf.float32)
@@ -57,6 +58,9 @@ def load_png(image_path, channels):
 
 
 def convert_matches_to_dataset(matches):
+    """ From matches, being a dictionary containing paths to the
+    images and the corresponding labels, load data and return it as a
+    tf Dataset."""
     Dataset = tf.data.Dataset
 
     pairs = [(load_png(image_path, channels=3),
@@ -70,10 +74,14 @@ def convert_matches_to_dataset(matches):
 
 
 def load_unmatches(unmatches):
+    """ Load unlabelled images from the paths specified by the
+    dictionary `unmatches` and return them as a list. """
     return [load_png(path, channels=3) for _, path in unmatches.items()]
 
 
 def get_unmatches():
+    """ The top-level function for loading unmatches (= non-labelled
+    images). """
     images, labels = download_images_and_labels()
     _, unmatches = match_images_with_labels(images, labels)
     return load_unmatches(unmatches)
@@ -99,7 +107,9 @@ def augment_by_rotations(ds, no_rotations=0):
     return ds.flat_map(rotations)
 
 def map_image_by(ds, f):
-    Dataset = tf.data.Dataset
+    """ Maps by f the image part of the (image, label) tuples in the
+    dataset ds."""
+
     def mapper(image, label):
         image = f(image)
         return image, label
@@ -107,7 +117,9 @@ def map_image_by(ds, f):
     return ds.map(mapper)
 
 
-def get_training_dataset(repeats=10, rotations=4, shuffle_size=100):
+def get_training_dataset(rotations=4, shuffle_size=100):
+    """ The top-level function for loading matches (= labelled images)
+    and returning them as a dataset. """
     images, labels = download_images_and_labels()
     matches, _ = match_images_with_labels(images, labels)
     ds = convert_matches_to_dataset(matches)
