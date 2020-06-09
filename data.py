@@ -80,6 +80,7 @@ def get_unmatches():
 
 
 def augment_by_rotations(ds, no_rotations=0):
+    """ Explode the dataset by generating additional rotations. """
     Dataset = tf.data.Dataset
     def rotations(image, label):
         """ Return a dataset of random rotations of image and labels,
@@ -106,17 +107,16 @@ def map_image_by(ds, f):
     return ds.map(mapper)
 
 
-def get_training_and_test_datasets(repeats=10, rotations=4,
-        test_every_nth=100, shuffle_size=100):
+def get_training_dataset(repeats=10, rotations=4, shuffle_size=100):
     images, labels = download_images_and_labels()
     matches, _ = match_images_with_labels(images, labels)
     ds = convert_matches_to_dataset(matches)
+
+    #
+    # With a pre-trained encoder, both seem quite useless so far.
+    #
     # ds = augment_by_rotations(ds, rotations)
     # ds = map_image_by(ds,
     #                   lambda x: tf.image.random_jpeg_quality(x, 30, 70))
 
-    enumerated = ds.enumerate()
-    train = enumerated.filter(lambda i, _: i % test_every_nth != 0).map(lambda _, x: x)
-    test  = enumerated.filter(lambda i, _: i % test_every_nth == 0).map(lambda _, x: x)
-
-    return train.shuffle(shuffle_size), test.shuffle(shuffle_size)
+    return ds.shuffle(shuffle_size)
