@@ -1,4 +1,4 @@
-# Rooftops project for didа
+# Rooftops project
 
 ## How to run the code
 
@@ -15,36 +15,42 @@ python inference.py # takes a couple of seconds
 without labels. On the training data, an accuracy of nearly 91% can be
 achieved.
 
+I am also including `predictions-reference.png` such that you can see
+the results without having to run the whole training/inference
+pipeline.
+
 ## Details of implementation
 
 ### Data handling
 
 `data.py` downloads the data and creates a training dataset. Due to
 the sparseness of the data, I decided to use all 25 labelled images
-for training (no validation/test set) and verify the quality of
+for training (no validation/test set) and to verify the quality of
 training by the training accuracy plus visual inspection of the
 predictions for the unlabelled data.
 
 I experimented with augmenting the data by rotations, but didn't find
 it beneficial. A possible explanation would be that I'm using a
 pre-trained encoder part of the network which is already doing quite a
-good job of recongnising features in the input data.
+good job of robustly recongnising features in the input data.
 
 ### Model description
 
 I mostly followed the ideas
 [href](https://www.tensorflow.org/tutorials/images/segmentation)
-tutorial. The main idea is to utilize an U-Net architecture with a
+tutorial. The main point is to utilize a U-Net architecture with a
 pre-trained encoder part, taken from the MobileNetV2 model. I
 experimented with a hand-crafted U-Net architecture (not included of
 the code), but it delivered substantially worse results than the
 network with a pre-trained encoder.
 
-The differences of my code from the above tutorial:
+The differences of my code from the above tutorial are:
 
+- Just binary classification unlike the three-classes in the tutorial.
 - Because of the binary classification, I use a single output channel
-  and a simpler loss function (but still a cross-entropy loss).
-- My last layer outputs classification probabilities rather then
+  and a somewhat simpler loss function (but still a cross-entropy
+  loss).
+- My networ outputs classification probabilities rather then
   log-probs, which is achieved by having a sigmoid activation in the
   last layer, the reason being just two classification classes.
 - I experimented with the Dice loss plus a weighted combination of the
@@ -56,5 +62,5 @@ The differences of my code from the above tutorial:
 Having more data would help, as always in machine learning.
 
 The pictures seem to have different exposure, some of them being
-seemingly shot on overcast days. A smarter data normalisation strategy
+seemingly taken on overcast days. A smarter data normalisation strategy
 cold help to mitigate that.
