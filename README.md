@@ -6,13 +6,15 @@ Running
 
 ```
 pip install -r requirements.txt
-python train.py # takes a couple of minutes
-python inference.py # takes a couple of seconds
+python train.py                            # takes a couple of minutes
+python inference.py                        # takes a couple of seconds
 ```
 
 (preferrably in a fresh Python 3.7 virtual environment) will produce
 `predictions.png` that shows the predicted masks for the five pictures
-without labels. On the training data, an accuracy of nearly 91% can be
+without labels. In addition, the trained model is saved as `model.tf`
+Judging by the the training data only (see the remark below on the
+absence of the validation/test data), an accuracy of nearly 91% is
 achieved.
 
 I am also including `predictions-reference.png` such that you can see
@@ -39,10 +41,12 @@ good job of robustly recongnising features in the input data.
 I mostly followed the ideas
 [href](https://www.tensorflow.org/tutorials/images/segmentation)
 tutorial. The main point is to utilize a U-Net architecture with a
-pre-trained encoder part, taken from the MobileNetV2 model. I
-experimented with a hand-crafted U-Net architecture (not included of
-the code), but it delivered substantially worse results than the
-network with a pre-trained encoder.
+pre-trained encoder part, taken from the MobileNetV2 model, which has
+a total of 155 single layers.
+
+I experimented with a hand-crafted U-Net architecture, too (not
+included of the code), but it delivered substantially worse results
+than the network with a pre-trained encoder.
 
 The differences of my code from the above tutorial are:
 
