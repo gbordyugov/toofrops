@@ -6,11 +6,11 @@ from tensorflow.keras.layers import Input, Concatenate, Conv2DTranspose
 from constants import IMG_WIDTH, IMG_HEIGHT
 
 #
-# Most of the code is borrowed from
+# Most of this model code is borrowed from
 # https://www.tensorflow.org/tutorials/images/segmentation
 #
 
-def unet(output_channels):
+def unet():
     base_model = tf.keras.applications.MobileNetV2(
         input_shape=[IMG_HEIGHT, IMG_WIDTH, 3], include_top=False)
 
@@ -31,10 +31,10 @@ def unet(output_channels):
     down_stack.trainable = False
 
     up_stack = [
-        pix2pix.upsample(512, 3),  # 4x4 -> 8x8
-        pix2pix.upsample(256, 3),  # 8x8 -> 16x16
-        pix2pix.upsample(128, 3),  # 16x16 -> 32x32
-        pix2pix.upsample(64, 3),   # 32x32 -> 64x64
+        pix2pix.upsample(512, 3),
+        pix2pix.upsample(256, 3),
+        pix2pix.upsample(128, 3),
+        pix2pix.upsample(64, 3),
     ]
 
     inputs = Input(shape=[IMG_HEIGHT, IMG_WIDTH, 3])
@@ -53,8 +53,8 @@ def unet(output_channels):
         x = concat([x, skip])
 
         # This is the last layer of the model
-        last = Conv2DTranspose(output_channels, 3, strides=2,
-            padding='same')  # 64x64 -> 128x128
+        last = Conv2DTranspose(1, 3, strides=2,
+            activation='sigmoid', padding='same')
 
     x = last(x)
 

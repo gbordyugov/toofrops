@@ -97,13 +97,23 @@ def augment_by_rotations(ds, no_rotations=0):
 
     return ds.flat_map(rotations)
 
+def map_image_by(ds, f):
+    Dataset = tf.data.Dataset
+    def mapper(image, label):
+        image = f(image)
+        return image, label
+
+    return ds.map(mapper)
+
 
 def get_training_and_test_datasets(repeats=10, rotations=4,
-        test_every_nth=10, shuffle_size=100):
+        test_every_nth=100, shuffle_size=100):
     images, labels = download_images_and_labels()
     matches, _ = match_images_with_labels(images, labels)
     ds = convert_matches_to_dataset(matches)
     # ds = augment_by_rotations(ds, rotations)
+    # ds = map_image_by(ds,
+    #                   lambda x: tf.image.random_jpeg_quality(x, 30, 70))
 
     enumerated = ds.enumerate()
     train = enumerated.filter(lambda i, _: i % test_every_nth != 0).map(lambda _, x: x)
