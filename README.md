@@ -51,7 +51,8 @@ than the network with a pre-trained encoder.
 
 The differences of my code from the above tutorial are:
 
-- Just binary classification unlike the three-classes in the tutorial.
+- The problem at hand requires just a binary classifier unlike the
+  three-way classifier in the tutorial.
 - Because of the binary classification, I use a single output channel
   and a somewhat simpler loss function (but still a cross-entropy
   loss).
