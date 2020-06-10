@@ -17,8 +17,9 @@ Judging by the the training data only (see the remark below on the
 absence of the validation/test data), an accuracy of nearly 91% is
 achieved.
 
-I am also including `predictions-reference.png` such that you can see
-the results without having to run the whole training/inference
+I am also including
+[predictions-reference.png](predictions-reference.png) such that you
+can see the results without having to run the whole training/inference
 pipeline.
 
 ## Details of implementation
