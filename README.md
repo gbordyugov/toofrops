@@ -63,7 +63,7 @@ The differences of my code from the above tutorial are:
   cross-entropy and Dice loss, but couldn't find any substantial
   benefits of the Dice loss.
 
-### Possible improvements
+## Possible improvements
 
 Having more data would help, as always in machine learning.
 
