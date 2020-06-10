@@ -39,8 +39,8 @@ good job of robustly recongnising features in the input data.
 
 ### Model description
 
-I mostly followed the ideas
-[href](https://www.tensorflow.org/tutorials/images/segmentation)
+I mostly followed the ideas from
+[this](https://www.tensorflow.org/tutorials/images/segmentation)
 tutorial. The main point is to utilize a U-Net architecture with a
 pre-trained encoder part, taken from the MobileNetV2 model, which has
 a total of 155 single layers.
