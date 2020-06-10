@@ -14,8 +14,9 @@ def make_one_prediction(model, input):
 
     return pred
 
-def predict_unmatches(model, filename):
-    unmatches = get_unmatches()
+def predict_unmatches(model, unmatches, filename):
+    """ Generate plots with images without labels (aka unmatches) with
+    the corresponding predicted masks. """
     preds = [make_one_prediction(model, u) for u in unmatches]
     fig, axes = plt.subplots(5, 2, figsize=(10, 15))
 
@@ -29,5 +30,6 @@ def predict_unmatches(model, filename):
 
 
 if '__main__' == __name__:
+    unmatches = get_unmatches()
     model = tf.keras.models.load_model('model.tf')
-    predict_unmatches(model, 'predictions.png')
+    predict_unmatches(model, unmatches, 'predictions.png')
