@@ -67,10 +67,6 @@ tutorial. The main point is to utilize a U-Net architecture with a
 pre-trained encoder part, taken from the MobileNetV2 model, which has
 a total of 155 single layers.
 
-I experimented with a hand-crafted U-Net architecture, too (not
-included of the code), but it delivered substantially worse results
-than the network with a pre-trained encoder.
-
 The differences of my code from the above tutorial are:
 
 - The problem at hand requires just a binary classifier unlike the
@@ -84,6 +80,11 @@ The differences of my code from the above tutorial are:
 - I experimented with the Dice loss plus a weighted combination of the
   cross-entropy and Dice loss, but couldn't find any substantial
   benefits of the Dice loss.
+
+I experimented with a hand-crafted U-Net architecture, too (not
+included of the code), but it delivered substantially worse results
+than the network with a pre-trained encoder.
+
 
 ## Possible improvements
 
