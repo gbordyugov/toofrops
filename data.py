@@ -117,7 +117,7 @@ def map_image_by(ds, f):
     return ds.map(mapper)
 
 
-def get_training_dataset(rotations=4, shuffle_size=100):
+def get_dataset(rotations=4, shuffle_size=100):
     """ The top-level function for loading matches (= labelled images)
     and returning them as a dataset. """
     images, labels = download_images_and_labels()
@@ -131,4 +131,4 @@ def get_training_dataset(rotations=4, shuffle_size=100):
     # ds = map_image_by(ds,
     #                   lambda x: tf.image.random_jpeg_quality(x, 30, 70))
 
-    return ds.shuffle(shuffle_size)
+    return ds

@@ -1,7 +1,7 @@
 import tensorflow as tf
 
 from model import unet
-from data import get_training_dataset
+from data import get_dataset
 
 
 def dice_plus_x_entropy_loss(y_true, y_pred):
@@ -26,7 +26,7 @@ def train(epochs=10, batch_size=5):
     model.compile(optimizer='adam', loss=tf.keras.losses.BinaryCrossentropy(),
                   metrics=['accuracy'])
 
-    train = get_training_dataset()
+    train = get_dataset()
 
     # can consume too much memory on a larger dataset, but for 25 pics is OK
     train_size = len(list(train))

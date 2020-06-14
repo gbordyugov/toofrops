@@ -65,8 +65,10 @@ The differences of my code from the above tutorial are:
 
 ## Possible improvements
 
-Having more data would help, as always in machine learning.
-
-The pictures seem to have different exposure, some of them being
-seemingly taken on overcast days. A smarter data normalisation strategy
-cold help to mitigate that.
+- Having more data would help, as always in machine learning.
+- Engineering a more sophisticated loss function, for instance, one
+  penalsing false positives more than false negatives (additional
+  research is needed).
+- The pictures seem to have different exposure, some of them being
+  seemingly taken on overcast days. A smarter data normalisation
+  strategy cold help to mitigate that.
