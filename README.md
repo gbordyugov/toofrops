@@ -22,6 +22,26 @@ I am also including
 can see the results without having to run the whole training/inference
 pipeline.
 
+## Performance evalution of the model
+
+Running
+
+```
+python evaluate.py
+```
+
+will run an automatic validation. By default, in every of a total 10
+rounds, the whole 25 labelled images would be randomly split into a
+train dataset with 20 pictures and a test detaset with 5 pictures. The
+model would be trained on those 20 training pictures over 10 epochs,
+and the validation set of 5 pictures would be used to calculated the
+accuracy. The single accuracies would be averaged over and the mean
+accuracy reported at the end of the script runtime. My current value is
+
+```
+Average validation accuracy: 0.8637125253677368
+```
+
 ## Details of implementation
 
 ### Data handling
