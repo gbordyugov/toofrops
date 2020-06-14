@@ -93,16 +93,19 @@ than the network with a pre-trained encoder.
 - Having more data would help, as always in machine learning.
 - Engineering a more sophisticated loss function, for instance, one
   penalsing false positives more than false negatives (additional
-  research would be needed).
+  research would be needed). The main motivation for looking for a
+  better loss is the apparent discrepancy between the relatively high
+  values of accuracy and visual quality of the prediction of rooftops.
+- Another idea for improving the loss function would be to apply some
+  domain-specific knowledge about the shape (or number) of the
+  predicted masks. For example, one could penalise the degree of
+  non-rectangleness of the generated masks. Or calculate the number of
+  predicted rooftops (as the number of connected positive regions in
+  the predicted mask) and penalise its discrepancy from the ground
+  truth.
 - The pictures seem to have different exposure, some of them being
   seemingly taken on overcast days. A smarter data normalisation
   strategy cold help to mitigate that.
-- Another idea for improving the loss function would be to apply some
-  domain-specific knowledge about the shape of the predicted masks.
-  For example, one could penalise the degree of non-rectangleness of
-  the generated masks. Or calculate the number of predicted rooftops
-  (as the number of connected positive regions in the predicted mask)
-  and penalise its discrepancy from the ground truth.
 - I went with the vanilla settings of the Adam optimiser, it's
   probable that it would be possible to squeeze another performance
   improvement by tweaking it a bit.
