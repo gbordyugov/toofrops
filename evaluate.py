@@ -27,12 +27,14 @@ def train_and_validate(epochs=10, batch_size=5, test_batch_size=1):
     loss = history['val_loss'][-1]
     acc  = history['val_accuracy'][-1]
 
+    return loss, acc
+
 
 def evaluate(num_rounds=10):
     """ Run `num_rounds` evaluation steps, collect the validation
     accuracies and return their mean."""
     losses_and_accs = [train_and_validate(30) for _ in range(num_rounds)]
-    return array(losses_and_accs).mean()
+    return array(losses_and_accs).mean(axis=0)
 
 
 if '__main__' == __name__:

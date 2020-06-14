@@ -98,7 +98,9 @@ than the network with a pre-trained encoder.
 - Another idea for improving the loss function would be to apply some
   domain-specific knowledge about the shape of the predicted masks.
   For example, one could penalise the degree of non-rectangleness of
-  the generated masks.
+  the generated masks. Or calculate the number of predicted rooftops
+  (as the number of connected positive regions in the predicted mask)
+  and penalise its discrepancy from the ground truth.
 - I went with the vanilla settings of the Adam optimiser, it's
   probable that it would be possible to squeeze another performance
   improvement by tweaking it a bit.
