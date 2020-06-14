@@ -42,6 +42,8 @@ be averaged over and their mean values will be reported at the end of
 the script runtime. Here, I'm reporting the current value of
 
 ```
+Average validation loss: 0.08814624436199665
+Average validation accuracy: 0.9022759914398193
 ```
 
 ## Details of implementation
