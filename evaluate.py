@@ -22,18 +22,20 @@ def train_and_validate(epochs=10, batch_size=5, test_batch_size=1):
     train_ds = ds.skip(test_batch_size)
 
     history = model.fit(train_ds, epochs=epochs,
-                        validation_data=test_ds)
+                        validation_data=test_ds).history
 
-    return history.history['val_accuracy'][-1]
+    loss = history['val_loss'][-1]
+    acc  = history['val_accuracy'][-1]
 
 
 def evaluate(num_rounds=10):
     """ Run `num_rounds` evaluation steps, collect the validation
     accuracies and return their mean."""
-    accs = [train_and_validate() for _ in range(num_rounds)]
-    return array(accs).mean()
+    losses_and_accs = [train_and_validate(30) for _ in range(num_rounds)]
+    return array(losses_and_accs).mean()
 
 
 if '__main__' == __name__:
-    accuracy = evaluate()
+    loss, accuracy = evaluate()
+    print('Average validation loss:', loss)
     print('Average validation accuracy:', accuracy)

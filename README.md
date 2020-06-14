@@ -11,18 +11,18 @@ python inference.py                        # takes a couple of seconds
 ```
 
 (preferrably in a fresh Python 3.7 virtual environment) will produce
-`predictions.png` that shows the predicted masks for the five pictures
-without labels. In addition, the trained model is saved as `model.tf`
-Judging by the the training data only (see the remark below on the
-absence of the validation/test data), an accuracy of nearly 91% is
-achieved.
+the file `predictions.png` that shows the predicted masks for the five
+pictures without labels. In addition, the trained model is saved as
+`model.tf` Judging by the the training data only (see the paragraph
+below about model evaluation using cross-validation), an accuracy of
+nearly 91% is achieved.
 
 I am also including
 [predictions-reference.png](predictions-reference.png) such that you
 can see the results without having to run the whole training/inference
 pipeline.
 
-## Performance evalution of the model
+## Validation and performance evalution of the model
 
 Running
 
@@ -30,16 +30,18 @@ Running
 python evaluate.py
 ```
 
-will run an automatic validation. By default, in every of a total 10
-rounds, the whole 25 labelled images would be randomly split into a
-train dataset with 20 pictures and a test detaset with 5 pictures. The
-model would be trained on those 20 training pictures over 10 epochs,
-and the validation set of 5 pictures would be used to calculated the
-accuracy. The single accuracies would be averaged over and the mean
-accuracy reported at the end of the script runtime. My current value is
+will run an automatic performance evaluation of the model.
+
+By default, in every of 10 rounds, the whole 25 labelled images would
+be randomly split into a train dataset with 20 pictures and a test
+detaset with 5 pictures. The model would be trained on those 20
+training pictures over 10 epochs, and the validation set of 5 pictures
+would be used to calculated the loss and accuracy. The validation loss
+and accuracy after the last training epoch in every of 10 rounds would
+be averaged over and their mean values will be reported at the end of
+the script runtime. Here, I'm reporting the current value of
 
 ```
-Average validation accuracy: 0.8637125253677368
 ```
 
 ## Details of implementation
@@ -88,7 +90,11 @@ The differences of my code from the above tutorial are:
 - Having more data would help, as always in machine learning.
 - Engineering a more sophisticated loss function, for instance, one
   penalsing false positives more than false negatives (additional
-  research is needed).
+  research would be needed).
 - The pictures seem to have different exposure, some of them being
   seemingly taken on overcast days. A smarter data normalisation
   strategy cold help to mitigate that.
+- Another idea for improving the loss function would be to apply some
+  domain-specific knowledge about the shape of the predicted masks.
+  For example, one could penalise the degree of non-rectangleness of
+  the generated masks.
