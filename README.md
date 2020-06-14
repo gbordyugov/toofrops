@@ -98,3 +98,6 @@ The differences of my code from the above tutorial are:
   domain-specific knowledge about the shape of the predicted masks.
   For example, one could penalise the degree of non-rectangleness of
   the generated masks.
+- I went with the vanilla settings of the Adam optimiser, it's
+  probable that it would be possible to squeeze another performance
+  improvement by tweaking it a bit.
