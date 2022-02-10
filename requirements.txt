@@ -1,4 +1,4 @@
-tensorflow==2.5.1
+tensorflow==2.5.3
 tensorflow_addons==0.10.0
 matplotlib==3.2.1
 git+https://github.com/tensorflow/examples.git
